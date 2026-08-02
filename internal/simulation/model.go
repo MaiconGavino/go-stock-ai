@@ -53,7 +53,7 @@ type SimulationResult struct{
 
 	// Workers indica quantos workers concorrentes foram utilizados
 	// (1 significa execução sequencial).
-	workers int `json:"workers"`
+	Workers int `json:"workers"`
 }
 
 // Simulator define o contrato do motor de simulações.

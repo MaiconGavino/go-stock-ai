@@ -23,7 +23,7 @@ func NewMonteCarloSimulator() *MonteCarloSimulator {
 // SimularEstoque executa a simulação sequencial: gera as amostras de
 // demanda uma a uma, em um único goroutine. É a versão de referência usada
 // para comparação com a versão concorrente (ver concurrent.go) em
-// benchmarks.
+// benchmarks. 
 func (s *MonteCarloSimulator) SimularEstoque(ctx context.Context, input SimulationInput) (SimulationResult, error) {
 	if err := ctx.Err(); err != nil {
 		return SimulationResult{}, err
@@ -42,7 +42,7 @@ func (s *MonteCarloSimulator) SimularEstoque(ctx context.Context, input Simulati
 		if i%10000 == 0 {
 			if err := ctx.Err(); err != nil {
 				return SimulationResult{}, err
-			}
+			  }
 		}
 		amostras = append(amostras, gerarDemanda(rng, input.DemandaMedia, input.Variacao))
 	}
