@@ -37,7 +37,7 @@ type SimulationResult struct{
 
 	// RiscoFaltaEstoqueRecomendado é o risco de falta remanescente após
 	// adotar o estoque recomendado.
-	RiscoFaltaEstoqueRecomendado float64 `json: "risco_falta_estoque_recomendado"`
+	RiscoFaltaEstoqueRecomendado float64 `json:"risco_falta_estoque_recomendado"`
 
 	// DemandaMediaSimulada é a média observada nos cenários gerados
 	// (deve se aproximar de DemandaMedia, servindo como checagem de
