@@ -3,7 +3,9 @@ package main
 import (
 	"context"
 	"log"
+	"log/slog"
 	"os"
+	"time"
 
 	"github.com/modelcontextprotocol/go-sdk/mcp"
 
@@ -38,6 +40,8 @@ func novoServidorMCP(sim simulation.Simulator) *mcp.Server {
 	}
 
 	mcp.AddTool(server, tool, func(ctx context.Context, _ *mcp.CallToolRequest, in simularEstoqueInput) (*mcp.CallToolResult, simulation.SimulationResult, error) {
+		inicio := time.Now()
+
 		entrada := simulation.SimulationInput{
 			DemandaMedia:         in.DemandaMedia,
 			Variacao:             in.Variacao,
@@ -51,13 +55,27 @@ func novoServidorMCP(sim simulation.Simulator) *mcp.Server {
 			// Erro tratado (ValidationError, mensagem amigável): o SDK
 			// converte automaticamente em um resultado de ferramenta com
 			// IsError=true, em vez de um erro de protocolo.
+			slog.Warn("chamada de simular_estoque rejeitada na validação",
+				"duracao_ms", time.Since(inicio).Milliseconds(),
+				"erro", err.Error(),
+			)
 			return nil, simulation.SimulationResult{}, err
 		}
 
 		resultado, err := sim.SimularEstoque(ctx, entrada)
 		if err != nil {
+			slog.Warn("chamada de simular_estoque falhou",
+				"duracao_ms", time.Since(inicio).Milliseconds(),
+				"erro", err.Error(),
+			)
 			return nil, simulation.SimulationResult{}, err
 		}
+
+		slog.Info("chamada de simular_estoque concluída",
+			"duracao_ms", time.Since(inicio).Milliseconds(),
+			"simulacoes_executadas", resultado.SimulacoesExecutadas,
+			"workers", resultado.Workers,
+		)
 
 		return nil, resultado, nil
 	})
@@ -66,10 +84,12 @@ func novoServidorMCP(sim simulation.Simulator) *mcp.Server {
 }
 
 func main() {
+	log.SetOutput(os.Stderr) // stdout é reservado ao protocolo MCP (stdio)
+	slog.SetDefault(slog.New(slog.NewJSONHandler(os.Stderr, nil)))
+
 	simulador := simulation.NewConcurrentSimulator(0) // 0 = runtime.NumCPU()
 	server := novoServidorMCP(simulador)
 
-	log.SetOutput(os.Stderr) // stdout é reservado ao protocolo MCP (stdio)
 	log.Println("go-stock-ai MCP server pronto — aguardando conexão via stdio")
 
 	if err := server.Run(context.Background(), &mcp.StdioTransport{}); err != nil {

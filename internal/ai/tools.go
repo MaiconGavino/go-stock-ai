@@ -13,8 +13,8 @@ const ToolNameSimularEstoque = "simular_estoque"
 //SimularEstoqueTool descreve, em JSON Schema, os parâmetros que o modelo
 // deve extrair da solicitação do usuário para acionar a simulação de estoque
 
-func SimularEstoqueTool()responses.ToolUnionParam {
-	paramentros := map[string]any{
+func SimularEstoqueTool() responses.ToolUnionParam {
+	parametros := map[string]any{
 		"type": "object",
 		"properties": map[string]any{
 			"demanda_media": map[string]any{
@@ -41,7 +41,8 @@ func SimularEstoqueTool()responses.ToolUnionParam {
 		"required":             []string{"demanda_media", "estoque_atual"},
 		"additionalProperties": false,
 	}
-	return responses.ToolParamOfFunction(ToolNameSimularEstoque, paramentros, false)
+
+	return responses.ToolParamOfFunction(ToolNameSimularEstoque, parametros, false)
 }
 
 // toolArguments espelha o schema aceito pela ferramenta simular_estoque.

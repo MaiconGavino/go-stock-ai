@@ -6,6 +6,7 @@ package service
 import (
 	"context"
 	"errors"
+	"log/slog"
 	"strings"
 	"time"
 
@@ -48,6 +49,7 @@ func NewService(ai Analisador, simulador simulation.Simulator) *Service {
 // Analisar valida a mensagem do usuário, aplica um tempo limite e delega a
 // interpretação ao cliente de IA, traduzindo qualquer falha
 func (s *Service) Analisar(ctx context.Context, mensagem string) (AnalysisResponse, error) {
+	inicio := time.Now()
 	mensagem = strings.TrimSpace(mensagem)
 
 	if mensagem == "" {
@@ -66,7 +68,15 @@ func (s *Service) Analisar(ctx context.Context, mensagem string) (AnalysisRespon
 
 	resultado, err := s.ai.Analisar(ctx, mensagem, s.simulador)
 	if err != nil {
-		return AnalysisResponse{}, traduzirErro(err)
+		erroTraduzido := traduzirErro(err)
+		// Os logs nunca incluem o conteúdo da mensagem do usuário nem
+		// segredos — apenas metadados técnicos da execução (seção 21.5 e
+		// 24 do documento: duração, sucesso/falha, sem dados pessoais).
+		slog.Warn("análise falhou",
+			"duracao_ms", time.Since(inicio).Milliseconds(),
+			"erro", erroTraduzido.Error(),
+		)
+		return AnalysisResponse{}, erroTraduzido
 	}
 
 	resposta := AnalysisResponse{
@@ -79,6 +89,13 @@ func (s *Service) Analisar(ctx context.Context, mensagem string) (AnalysisRespon
 		resposta.Parametros = &resultado.Parametros
 		resposta.Resultado = &resultado.Resultado
 	}
+
+	slog.Info("análise concluída",
+		"duracao_ms", time.Since(inicio).Milliseconds(),
+		"ferramenta_chamada", resultado.FerramentaChamada,
+		"simulacoes_executadas", resultado.Resultado.SimulacoesExecutadas,
+		"workers", resultado.Resultado.Workers,
+	)
 
 	return resposta, nil
 }
