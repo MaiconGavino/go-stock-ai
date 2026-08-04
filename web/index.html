@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<title>Além do Prompt — Simulação de Estoque</title>
+	<link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+	<main class="container">
+		<h1>Simulação inteligente de estoque</h1>
+		<p class="subtitulo">Descreva o cenário do seu estoque em linguagem natural.</p>
+
+		<textarea id="mensagem" rows="4" placeholder="Vendo em média 100 unidades por dia, com variação de aproximadamente 20 unidades. Atualmente mantenho 110 unidades em estoque e quero ter produto disponível em 95% dos dias."></textarea>
+
+		<button id="btn-simular">Simular cenário</button>
+
+		<section id="etapas" class="etapas" hidden></section>
+
+		<section id="resultado" class="resultado" hidden>
+			<h2>Resultado</h2>
+			<p id="explicacao"></p>
+			<dl id="indicadores" class="indicadores"></dl>
+
+			<details id="tecnico">
+				<summary>Ver dados técnicos</summary>
+				<pre id="tecnico-json"></pre>
+			</details>
+		</section>
+
+		<p id="erro" class="erro" hidden></p>
+	</main>
+
+	<script src="/app.js"></script>
+</body>
+</html>

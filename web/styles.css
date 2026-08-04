@@ -1,0 +1,104 @@
+:root {
+	color-scheme: light;
+	font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+
+body {
+	margin: 0;
+	background: #f6f7fb;
+	color: #1a1a2e;
+}
+
+.container {
+	max-width: 640px;
+	margin: 3rem auto;
+	padding: 0 1.5rem;
+}
+
+h1 {
+	font-size: 1.6rem;
+	margin-bottom: 0.25rem;
+}
+
+.subtitulo {
+	color: #555;
+	margin-top: 0;
+}
+
+textarea {
+	width: 100%;
+	box-sizing: border-box;
+	padding: 0.75rem;
+	font-size: 1rem;
+	border: 1px solid #ccc;
+	border-radius: 8px;
+	resize: vertical;
+}
+
+button {
+	margin-top: 0.75rem;
+	padding: 0.6rem 1.4rem;
+	font-size: 1rem;
+	background: #3949ab;
+	color: white;
+	border: none;
+	border-radius: 8px;
+	cursor: pointer;
+}
+
+button:disabled {
+	opacity: 0.6;
+	cursor: default;
+}
+
+.etapas {
+	margin-top: 1.5rem;
+	font-size: 0.9rem;
+	color: #555;
+}
+
+.etapa::before {
+	content: "→ ";
+}
+
+.resultado {
+	margin-top: 1.5rem;
+	background: white;
+	border-radius: 12px;
+	padding: 1.25rem 1.5rem;
+	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+.indicadores {
+	display: grid;
+	grid-template-columns: 1fr auto;
+	row-gap: 0.4rem;
+	column-gap: 1rem;
+	margin: 1rem 0;
+}
+
+.indicadores dt {
+	color: #555;
+}
+
+.indicadores dd {
+	margin: 0;
+	font-weight: 600;
+	text-align: right;
+}
+
+.erro {
+	margin-top: 1.5rem;
+	color: #b3261e;
+	background: #fdecea;
+	padding: 0.75rem 1rem;
+	border-radius: 8px;
+}
+
+pre {
+	white-space: pre-wrap;
+	font-size: 0.8rem;
+	background: #f0f0f5;
+	padding: 0.75rem;
+	border-radius: 8px;
+}
